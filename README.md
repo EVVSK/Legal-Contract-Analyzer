@@ -1,6 +1,8 @@
-# Enterprise Legal Contract Analyzer (RAG System)
+# Enterprise Legal Contract Analyzer (RAG Pipeline)
 
-A production-ready, local-first Retrieval-Augmented Generation (RAG) system designed for analyzing legal contracts. Upload contracts, ask natural language questions, and receive AI-powered answers with full source citations.
+An enterprise-grade, local-first Retrieval-Augmented Generation (RAG) system designed to ingest, process, and interrogate complex legal contracts. 
+
+This project was built to solve the core challenges of modern AI legal analysis: data privacy, vector dilution, and API rate limiting. It leverages a split architecture with a highly interactive Next.js frontend and a Python/FastAPI backend powered by local GPU embeddings and the Groq LLM engine.
 
 ---
 
@@ -54,7 +56,7 @@ Built with a local-first architecture, all document processing and embedding gen
 
 ## Technology Stack
 
-### Frontend
+### Frontend (User Interface)
 | Technology | Purpose |
 |------------|---------|
 | **Next.js 15** | React framework with App Router |
@@ -62,7 +64,7 @@ Built with a local-first architecture, all document processing and embedding gen
 | **Tailwind CSS 4** | Utility-first styling |
 | **TypeScript** | Type safety |
 
-### Backend
+### Backend (API & Orchestration)
 | Technology | Purpose |
 |------------|---------|
 | **FastAPI** | High-performance async API |
@@ -75,21 +77,12 @@ Built with a local-first architecture, all document processing and embedding gen
 ---
 
 ## Key Features
-
-### Intent Routing
-Greetings and general questions bypass the vector database, reducing latency and preventing unnecessary API calls.
-
-### Metadata Filtering
-Search within a specific uploaded document or across the entire contract corpus using the dropdown filter.
-
-### Local-First GPU Processing
-All embeddings are generated locally on your NVIDIA GPU using the BGE-Large model—no data sent to external embedding services.
-
-### Citation UI
-Every AI response includes a collapsible "Sources & Citations" accordion showing the exact contract chunks used to generate the answer.
-
-### Hybrid Agent Prompt
-The LLM operates as a dual-persona legal assistant: a friendly conversationalist for general queries, and a precise legal analyst for contract questions.
+* **Local-First Privacy:** Legal documents are highly sensitive. This architecture ensures that document parsing, chunking, and mathematical embeddings (via Hugging Face) happen entirely on local hardware. Only the final, retrieved context chunks are sent to the LLM for reasoning.
+* **Massive Batch Ingestion:** Includes a standalone CLI pipeline (`batch_ingest.py`) capable of processing the CUAD (Contract Understanding Atticus Dataset). The database is currently seeded with over **12,000+ vectorized contract clauses**.
+* **Intent Routing (Small Talk Bypass):** Implements a heuristic router that detects general greetings and conversational intents, bypassing the expensive vector database search to save compute and API tokens.
+* **Metadata Filtering (Anti-Vector Dilution):** Solves the "Needle in a Haystack" problem. Users can isolate their queries to specific uploaded files. The backend over-fetches (`TOP_K = 50`), filters strictly by the `source_file` metadata, and then slices the exact context.
+* **Token Diet Management:** Dynamically manages payload sizes to ensure the context window never exceeds free-tier API rate limits (6,000 TPM), truncating gracefully when necessary.
+* **Transparent Citations:** The UI natively renders the raw, pre-formatted contract text that the AI used to generate its answer, preventing legal hallucinations and building user trust.
 
 ---
 
