@@ -1,4 +1,4 @@
-# Enterprise Legal Contract Analyzer (RAG Pipeline)
+# Enterprise Legal Contract Clause Extraction via Local Vector Search and RAG
 
 An enterprise-grade, local-first Retrieval-Augmented Generation (RAG) system designed to ingest, process, and interrogate complex legal contracts. 
 
