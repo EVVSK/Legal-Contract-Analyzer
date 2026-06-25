@@ -1,4 +1,4 @@
-# Contra_bot: Precision Legal Clause Agent
+# ContraBot: Precision Legal Clause Agent
 
 An enterprise-grade, local-first Retrieval-Augmented Generation (RAG) system designed to ingest, process, and interrogate complex legal contracts. 
 
